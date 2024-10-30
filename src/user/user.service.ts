@@ -18,8 +18,8 @@ export class UserService {
     }
 
     create(@Body() userDto: UserDto) {
-        const category = this.UserRepository.create(userDto);
-        return this.UserRepository.save(category);
+        const user = this.UserRepository.create(userDto);
+        return this.UserRepository.save(user);
     }
 
     async findById(@Param("id") id: string) {

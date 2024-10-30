@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, Post, Put, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { UserDto } from './DTO/user.dto';
 import { UserService } from './user.service';
 
@@ -9,7 +9,7 @@ export class UserController {
     ) { }
 
     @Get()
-    findAll(){
+    findAll() {
         return this.userService.findAll()
     }
 
@@ -19,23 +19,23 @@ export class UserController {
     }
 
     @Get("findId/:id")
-    findById(@Param("id") id: string){
+    findById(@Param("id") id: string) {
         return this.userService.findById(id);
     }
 
     @Get("findEmail/:email")
-    findByEmail(@Param("email") email: string){
+    findByEmail(@Param("email") email: string) {
         return this.userService.findByEmail(email);
     }
 
     @Put(":id")
-    updateUser(@Param("id") id: string, @Body() UserDto: UserDto){
-        return this.userService.update(id,UserDto);
+    updateUser(@Param("id") id: string, @Body() UserDto: UserDto) {
+        return this.userService.update(id, UserDto);
     }
 
     @Delete("delete/:id")
-    deleteUser(@Param("id") id: number){
+    deleteUser(@Param("id") id: number) {
         return this.userService.delete(id);
     }
-    
+
 }

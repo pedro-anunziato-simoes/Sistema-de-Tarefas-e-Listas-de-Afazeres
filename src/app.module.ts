@@ -5,6 +5,10 @@ import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './user/entity/user.entity';
 import { AuthModule } from './auth/auth.module';
+import { ViewModule } from './view/view.module';
+import { ViewController } from './view/view.controller';
+import { TaskModule } from './task/task.module';
+import { taskEntity } from './task/entity/task.entity';
 
 @Module({
   imports: [
@@ -15,13 +19,15 @@ import { AuthModule } from './auth/auth.module';
       username: 'root',
       password: 'root',
       database: 'todolist',
-      entities: [UserEntity],
+      entities: [UserEntity,taskEntity],
       synchronize: true,
     }),
     UserModule,
-    AuthModule
+    ViewModule,
+    AuthModule,
+    TaskModule
   ],
-  controllers: [AppController],
+  controllers: [ViewController, AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

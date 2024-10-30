@@ -17,11 +17,11 @@ import { AuthGuard } from './auth.guard';
       signOptions: { expiresIn: '120s' },
     }),
   ],
-  providers: [AuthService,{
+  providers: [AuthService, {
     provide: APP_GUARD,
     useClass: AuthGuard,
   }],
   controllers: [AuthController],
   exports: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule { }

@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { UserDto } from './DTO/user.dto';
 import { UserService } from './user.service';
+import { Public } from 'src/auth/constants';
 
 @Controller('user')
 export class UserController {
@@ -12,7 +13,8 @@ export class UserController {
     findAll() {
         return this.userService.findAll()
     }
-
+    
+    @Public()
     @Post()
     create(@Body() userDto: UserDto) {
         return this.userService.create(userDto);

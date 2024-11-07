@@ -1,10 +1,72 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Página Inicial</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Board</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .board {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding: 20px 0;
+    }
+    .column {
+      flex: 0 0 300px;
+      margin: 0 10px;
+      background-color: #f8f9fa;
+      border-radius: 5px;
+      padding: 15px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .task {
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .task-title {
+      font-size: 16px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-  <h1><%= mensagem %></h1>
+  <div class="container">
+    <h1 class="my-4 text-center">Task Board</h1>
+    <div class="board">
+      <div class="column">
+        <h4 class="text-center">To Do</h4>
+        <% tasks.filter(task => task.status === 'todo').forEach(task => { %>
+          <div class="task">
+            <div class="task-title"><%= task.title %></div>
+            <p><%= task.description %></p>
+          </div>
+        <% }) %>
+      </div>
+      <div class="column">
+        <h4 class="text-center">In Progress</h4>
+        <% tasks.filter(task => task.status === 'in-progress').forEach(task => { %>
+          <div class="task">
+            <div class="task-title"><%= task.title %></div>
+            <p><%= task.description %></p>
+          </div>
+        <% }) %>
+      </div>
+      <div class="column">
+        <h4 class="text-center">Done</h4>
+        <% tasks.filter(task => task.status === 'done').forEach(task => { %>
+          <div class="task">
+            <div class="task-title"><%= task.title %></div>
+            <p><%= task.description %></p>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

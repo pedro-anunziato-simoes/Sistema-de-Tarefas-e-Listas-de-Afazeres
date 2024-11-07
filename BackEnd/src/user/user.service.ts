@@ -5,7 +5,6 @@ import { UserEntity } from 'src/user/entity/user.entity';
 import { Repository } from 'typeorm';
 import { UserDto } from './DTO/user.dto';
 
-
 @Injectable()
 export class UserService {
     constructor(
@@ -28,6 +27,14 @@ export class UserService {
             throw new NotFoundException(`Usuario com id '${id}' não encontrado`);
         }
         return user;
+    }
+
+    async findUser(@Body() userDto: UserDto) {
+        const user = await this.findByEmail(userDto.email);
+        if(user.senha == userDto.senha){
+           return true
+        }return false
+        
     }
 
     async findByEmail(@Param("email") email: string) {

@@ -30,6 +30,12 @@ export class UserController {
         return this.userService.findByEmail(email);
     }
 
+    @Public()
+    @Post("findUser")
+    findUser(@Body() userDto: UserDto) {
+        return this.userService.findUser(userDto);
+    }
+
     @Put(":id")
     updateUser(@Param("id") id: string, @Body() UserDto: UserDto) {
         return this.userService.update(id, UserDto);

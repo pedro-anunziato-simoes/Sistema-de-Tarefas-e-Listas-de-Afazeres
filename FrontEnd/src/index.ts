@@ -6,23 +6,16 @@ import axios from 'axios';
 const app = express();
 const port = 3001;
 
-// Configurar o EJS como motor de visualização
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-
-// Middleware para processar dados de formulários
 app.use(express.urlencoded({ extended: true }));
-// Middleware para receber dados em JSON (ex: AJAX)
 app.use(express.json());
-// Middleware para trabalhar com Cookies
 app.use(cookieParser());
-// Middleware para arquivos estáticos (opcional)
 app.use(express.static(path.join(__dirname, 'public')));
 
 
 // Rota principal
-app.get('/', async (req: Request, res: Response) => {
-
+app.get('/home', async (req: Request, res: Response) => {
   const access_token = req.cookies.access_token;
   const response = await axios.get("http://localhost:3000/task", {
     headers: {
@@ -31,6 +24,85 @@ app.get('/', async (req: Request, res: Response) => {
   });
   res.render('index', { tasks: response.data });
 });
+
+// Area de tasks
+
+// Rota para exibir o formulario de cadastro de task
+app.get('/tasks/create', (req, res) => {
+  res.render('cadastro-tasks');
+});
+
+// Rota para processar a criação da task
+app.post('/tasks/create', async (req: Request, res: Response) => {
+  const access_token = req.cookies.access_token;
+  const { titulo, descricao, prioridade, cor, status } = req.body;
+  const data = { titulo, descricao, prioridade, cor, status }
+  await axios.post("http://localhost:3000/task", data, {
+    headers: {
+      Authorization: `Bearer ${access_token}`
+    },
+  })
+  res.redirect('/home')
+})
+
+// Rota para mover a task de "estado"
+app.post('/tasks/move', async (req: Request, res: Response) => {
+  const { taskId } = req.body;
+  const data = { id: taskId };
+  const access_token = req.cookies.access_token;
+  await axios.post("http://localhost:3000/task/move", data, {
+    headers: {
+      Authorization: `Bearer ${access_token}`
+    },
+  })
+
+
+  setTimeout(function () {
+    res.redirect('/home');
+  }, 20);
+})
+
+// Rota para deletar/concluir uma task
+app.post('/tasks/delete/:id', async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const access_token = req.cookies.access_token;
+  await axios.delete(`http://localhost:3000/task/delete/${id}`, {
+    headers: {
+      Authorization: `Bearer ${access_token}`
+    },
+  })
+  res.redirect('/home')
+})
+
+// Rota para exibir a tela de alteração de task
+app.get('/tasks/edit/:id', async (req: Request, res: Response) => {
+  const access_token = req.cookies.access_token;
+  const id = req.params.id;
+  const response = await axios.get(`http://localhost:3000/task/findId/${id}`, {
+    headers: {
+      Authorization: `Bearer ${access_token}`
+    }
+  });
+  res.render('modificar-tasks', { task: response.data });
+  console.log(response)
+});
+
+app.post('/tasks/edit/:id', async (req: Request, res: Response) => {
+  const access_token = req.cookies.access_token;
+  const id = req.params.id;
+  const { titulo, descricao, prioridade, cor, status } = req.body
+  const data = { titulo, descricao, prioridade, cor, status }
+  await axios.put(`http://localhost:3000/task/${id}`, data, {
+    headers: {
+      Authorization: `Bearer ${access_token}`
+    },
+  })
+  res.redirect('/home')
+
+  })
+
+
+//Area de cadastro
 
 // Rota GET para exibir o formulário de cadastro
 app.get('/register', (req, res) => {
@@ -45,15 +117,14 @@ app.post('/register', async (req: Request, res: Response) => {
     email,
     senha: senha
   });
-  res.render('login', { mensagem: 'Cadastrado com Sucesso!',error:'' });
-
-
-
+  res.render('login', { mensagem: 'Cadastrado com Sucesso!', error: '' });
 });
+
+//Area de Login
 
 // Rota GET para exibir o formulário de login
 app.get('/login', (req, res) => {
-  res.render('login', { mensagem: '',error:'' });
+  res.render('login', { mensagem: '', error: '' });
 });
 
 // Rota POST para processar o login
@@ -63,7 +134,7 @@ app.post('/login', async (req: Request, res: Response) => {
     email, senha
   });
   if (verifyUser.data == false) {
-    res.render('login', { mensagem: '',error:'*Usuario ou senha incorretos' });
+    res.render('login', { mensagem: '', error: '*Usuario ou senha incorretos' });
   } else {
     const response = await axios.post("http://localhost:3000/auth/login", {
       email, senha
@@ -76,9 +147,20 @@ app.post('/login', async (req: Request, res: Response) => {
       maxAge: 24 * 60 * 60 * 1000 // 1 dia em milisegundos
     });
 
-    return res.redirect('/');
+    return res.redirect('/home');
   }
 });
+
+app.post('/logout', async (req: Request, res: Response) => {
+  const accessToken = '';
+  res.cookie("access_token", accessToken, {
+    httpOnly: true,
+    secure: false,
+    maxAge: 24 * 60 * 60 * 1000 // 1 dia em milisegundos
+  });
+  console.log(req.cookies.access_token)
+  res.redirect('/login')
+})
 
 // Iniciar o servidor
 app.listen(port, () => {

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Task</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card mt-5">
+          <div class="card-header">
+            <h3>Edit Task</h3>
+          </div>
+          <div class="card-body">
+            <form action="/tasks/edit/<%= task.id %>" method="POST">
+              <div class="form-group">
+                <label for="title">Titulo:</label>
+                <input type="text" class="form-control" id="titulo" name="titulo" value="<%= task.titulo %>" required>
+              </div>
+              <div class="form-group">
+                <label for="description">Descricao:</label>
+                <textarea class="form-control" id="descricao" name="descricao" rows="3" required><%= task.descricao %></textarea>
+              </div>
+              <div class="form-group">
+                <label for="prioridade">prioridade:</label>
+                <select class="form-control" id="prioridade" name="prioridade" required>
+                  <option value="Baixa" <% if(task.prioridade === 'Baixa') { %> selected <% } %>>Baixa</option>
+                  <option value="Media" <% if(task.prioridade === 'Media') { %> selected <% } %>>Media</option>
+                  <option value="Alta" <% if(task.prioridade === 'Alta') { %> selected <% } %>>Alta</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="status">Status:</label>
+                <select class="form-control" id="status" name="status" required>
+                  <option value="A fazer" <% if(task.status === 'A fazer') { %> selected <% } %>>A fazer</option>
+                  <option value="Em progresso" <% if(task.status === 'Em progresso') { %> selected <% } %>>Em progresso</option>
+                  <option value="Concluida" <% if(task.status === 'Concluida') { %> selected <% } %>>Concluida</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="color">Color:</label>
+                <input type="color" class="form-control" id="cor" name="cor" value="<%= task.cor %>" required>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">Atualizar Task</button>
+            </form>
+            <a href="/home" method="GET"class="btn btn-secondary mt-2" tabindex="-1" role="button">Voltar</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

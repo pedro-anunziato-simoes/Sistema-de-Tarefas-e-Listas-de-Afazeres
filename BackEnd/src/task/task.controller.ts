@@ -1,6 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { TaskDto } from './DTO/task.dto';
+import { Public } from 'src/auth/constants';
+import { taskEntity } from './entity/task.entity';
 
 
 @Controller('task')
@@ -12,6 +14,11 @@ export class TaskController {
     @Get()
     findAll() {
         return this.taskService.findAll()
+    }
+
+    @Post("move")
+    moveStatus(@Body() id: taskEntity) {
+        return this.taskService.move(id)
     }
 
     @Post()
@@ -30,12 +37,12 @@ export class TaskController {
     }
 
     @Put(":id")
-    updateUser(@Param("id") id: string, @Body() TaskDto: TaskDto) {
+    updateTask(@Param("id") id: string, @Body() TaskDto: TaskDto) {
         return this.taskService.update(id, TaskDto);
     }
 
     @Delete("delete/:id")
-    deleteUser(@Param("id") id: number) {
+    deleteTask(@Param("id") id: string) {
         return this.taskService.delete(id);
     }
 

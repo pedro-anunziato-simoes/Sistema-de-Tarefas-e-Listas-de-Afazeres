@@ -20,20 +20,33 @@ export class TaskService {
         return this.TaskRepository.save(task);
     }
 
-    async findById(@Param("id") id: string) {
-        const user = await this.TaskRepository.findOneBy({ id });
-        if (user === null) {
-            throw new NotFoundException(`Usuario com id '${id}' não encontrado`);
+    async move(@Body() entityId:taskEntity ) {
+        const task = await this.findById(entityId.id)
+        console.log(task)   
+        if(task.status == "A fazer"){
+            task.status = "Em progresso";
+            this.TaskRepository.save(task);
+        }else if(task.status == "Em progresso"){
+            task.status = "Concluida";
+            this.TaskRepository.save(task);
         }
-        return user;
+        return task;
+    }
+
+    async findById(@Param("id") id: string) {
+        const task = await this.TaskRepository.findOneBy({ id });
+        if (task === null) {
+            throw new NotFoundException(`Task com id '${id}' não encontrado`);
+        }
+        return task;
     }
 
     async findByTitle(@Param("titulo") titulo: string) {
-        const user = await this.TaskRepository.findOneBy({ titulo });
-        if (user === null) {
+        const task = await this.TaskRepository.findOneBy({ titulo });
+        if (task === null) {
             throw new NotFoundException(`Task com titulo: '${titulo}' não encontrada`);
         }
-        return user;
+        return task;
     }
 
     async update(@Param("id") id: string, @Body() taskDto: TaskDto) {
@@ -49,7 +62,7 @@ export class TaskService {
 
         return this.TaskRepository.save(task);
     }
-    async delete(@Param("id") id: number) {
+    async delete(@Param("id") id: string) {
         await this.TaskRepository.delete(id);
     }
 }

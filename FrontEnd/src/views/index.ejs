@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +13,7 @@
       overflow-x: auto;
       padding: 20px 0;
     }
+
     .column {
       flex: 0 0 300px;
       margin: 0 10px;
@@ -20,6 +22,7 @@
       padding: 15px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
+
     .task {
       background-color: white;
       border: 1px solid #ddd;
@@ -27,46 +30,113 @@
       padding: 10px;
       margin-bottom: 10px;
     }
+
     .task-title {
       font-size: 16px;
       font-weight: bold;
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <h1 class="my-4 text-center">Task Board</h1>
     <div class="board">
       <div class="column">
-        <h4 class="text-center">To Do</h4>
-        <% tasks.filter(task => task.status === 'todo').forEach(task => { %>
-          <div class="task">
-            <div class="task-title"><%= task.title %></div>
-            <p><%= task.description %></p>
+        <h4 class="text-center">A fazer</h4>
+        <% tasks.filter(task=> task.status === 'A fazer').forEach(task => { %>
+          <div class="task" style="background-color: <%=task.cor%>;">
+            <div class="task-title">
+              <%= task.titulo %>
+            </div>
+            <p>
+              <%= task.descricao %>
+            </p>
+            <p>
+              <%= task.prioridade %>
+            </p>
+            <form action="/tasks/move" method="POST">
+              <textarea id="taskId" name="taskId" style="display: none;"><%= task.id %></textarea>
+              <button type="submit" class="btn btn-primary w-100">Mover -></button>
+            </form>
+            <div class="d-flex align-items-center">
+              <form action="/tasks/delete/<%= task.id %>" method="POST" class="delete-form">
+                <button type="submit" class="btn btn-danger mr-2 mt-2">Excluir tarefa !</button>
+              </form>
+              <a href="/tasks/edit/<%= task.id %>" method="GET" class="btn btn-success mt-2" tabindex="-1" role="button">Editar
+                task</a>
+            </div>
           </div>
-        <% }) %>
+          <% }) %>
       </div>
       <div class="column">
-        <h4 class="text-center">In Progress</h4>
-        <% tasks.filter(task => task.status === 'in-progress').forEach(task => { %>
-          <div class="task">
-            <div class="task-title"><%= task.title %></div>
-            <p><%= task.description %></p>
+        <h4 class="text-center">Em progresso</h4>
+        <% tasks.filter(task=> task.status === 'Em progresso').forEach(task => { %>
+          <div class="task" style="background-color: <%=task.cor%>;">
+            <div class="task-title">
+              <%= task.titulo %>
+            </div>
+            <p>
+              <%= task.descricao %>
+            </p>
+            <p>
+              <%= task.prioridade %>
+            </p>
+            <form action="/tasks/move" method="POST">
+              <textarea id="taskId" name="taskId" style="display: none;"><%= task.id %></textarea>
+              <button type="submit" class="btn btn-primary w-100">Mover -></button>
+            </form>
+            <div class="d-flex align-items-center">
+              <form action="/tasks/delete/<%= task.id %>" method="POST" class="delete-form">
+                <button type="submit" class="btn btn-danger mr-2 mt-2">Excluir tarefa !</button>
+              </form>
+              <a href="/tasks/edit/<%= task.id %>" method="GET" class="btn btn-success mt-2" tabindex="-1" role="button">Editar
+                task</a>
+            </div>
           </div>
-        <% }) %>
+          <% }) %>
       </div>
       <div class="column">
-        <h4 class="text-center">Done</h4>
-        <% tasks.filter(task => task.status === 'done').forEach(task => { %>
-          <div class="task">
-            <div class="task-title"><%= task.title %></div>
-            <p><%= task.description %></p>
+        <h4 class="text-center">Concluida</h4>
+        <% tasks.filter(task=> task.status === 'Concluida').forEach(task => { %>
+          <div class="task" style="background-color: <%=task.cor%>;">
+            <div class="task-title">
+              <%= task.titulo %>
+            </div>
+            <p>
+              <%= task.descricao %>
+            </p>
+            <p>
+              <%= task.prioridade %>
+            </p>
+            <div class="d-flex align-items-center">
+              <form action="/tasks/delete/<%= task.id %>" method="POST" class="delete-form">
+                <button type="submit" class="btn btn-danger mr-2 mt-2">Excluir tarefa !</button>
+              </form>
+              <a href="/tasks/edit/<%= task.id %>" method="GET" class="btn btn-success mt-2" tabindex="-1" role="button">Editar
+                task</a>
+            </div>
           </div>
-        <% }) %>
+          <% }) %>
       </div>
     </div>
+    <a href="/tasks/create" method="GET" class="btn btn-primary" tabindex="-1" role="button">Criar Task</a>
+    <form action="/logout" method="POST">
+      <button class="btn btn-secondary mt-2" type="submit">Sair</button>
+    </form>
   </div>
+  <script>
+    document.querySelectorAll('.delete-form').forEach(form => {
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        if (confirm('Você tem certeza que deseja excluir essa task? (Ela será excluida pra SEMPRE)')) {
+          form.submit();
+        }
+      });
+    });
+  </script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

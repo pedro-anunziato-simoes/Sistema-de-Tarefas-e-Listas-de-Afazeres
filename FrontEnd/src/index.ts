@@ -133,6 +133,7 @@ app.post('/login', async (req: Request, res: Response) => {
   let verifyUser = await axios.post("http://localhost:3000/user/findUser", {
     email, senha
   });
+  console.log(verifyUser.data)
   if (verifyUser.data == false) {
     res.render('login', { mensagem: '', error: '*Usuario ou senha incorretos' });
   } else {

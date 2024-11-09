@@ -7,6 +7,8 @@
   <title>Task Board</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&display=swap');
+    body{ font-family: "Host Grotesk", sans-serif;}
     .board {
       display: flex;
       flex-wrap: nowrap;
@@ -26,6 +28,7 @@
     .task {
       background-color: white;
       border: 1px solid #ddd;
+      color: rgb(245, 244, 244);
       border-radius: 3px;
       padding: 10px;
       margin-bottom: 10px;
@@ -42,6 +45,7 @@
   <div class="container">
     <h1 class="my-4 text-center">Task Board</h1>
     <div class="board">
+      
       <div class="column">
         <h4 class="text-center">A fazer</h4>
         <% tasks.filter(task=> task.status === 'A fazer').forEach(task => { %>
@@ -53,7 +57,7 @@
               <%= task.descricao %>
             </p>
             <p>
-              <%= task.prioridade %>
+              Prioridade: <%= task.prioridade %>
             </p>
             <form action="/tasks/move" method="POST">
               <textarea id="taskId" name="taskId" style="display: none;"><%= task.id %></textarea>
@@ -80,7 +84,7 @@
               <%= task.descricao %>
             </p>
             <p>
-              <%= task.prioridade %>
+              Prioridade: <%= task.prioridade %>
             </p>
             <form action="/tasks/move" method="POST">
               <textarea id="taskId" name="taskId" style="display: none;"><%= task.id %></textarea>
@@ -107,7 +111,7 @@
               <%= task.descricao %>
             </p>
             <p>
-              <%= task.prioridade %>
+              Prioridade: <%= task.prioridade %>
             </p>
             <div class="d-flex align-items-center">
               <form action="/tasks/delete/<%= task.id %>" method="POST" class="delete-form">
